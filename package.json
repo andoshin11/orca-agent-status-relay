@@ -1,0 +1,19 @@
+{
+  "name": "orca-agent-status-relay",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Orca plugin that forwards agent status changes to a URL, signed with Standard Webhooks.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test \"test/**/*.test.mjs\"",
+    "check:manifest": "node scripts/check-manifest.mjs"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15",
+    "zod": "4.6.5"
+  }
+}

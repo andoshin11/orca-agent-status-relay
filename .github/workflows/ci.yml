@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      - run: npm test
+
+      # Validate the manifest with the parser of the Orca release named in engines.orca.
+      - uses: actions/checkout@v5
+        with:
+          repository: stablyai/orca
+          ref: v1.4.223
+          path: .orca
+          sparse-checkout: src/shared
+          persist-credentials: false
+
+      - name: Validate orca-plugin.json with Orca's parser
+        run: |
+          ln -s "$GITHUB_WORKSPACE/node_modules" .orca/node_modules
+          npm run check:manifest
+        env:
+          ORCA_SOURCE_DIR: ${{ github.workspace }}/.orca
