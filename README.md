@@ -23,17 +23,28 @@ Orca ── agent.status.changed ──▶ この plugin（worker） ── 署�
 
 ## インストール
 
-今のところ、ローカルフォルダからの読み込み（開発用の読み込み）で使います。
+Orca の **Settings → Plugins** で、Git URL を指定してインストールします。
 
-```sh
-git clone https://github.com/andoshin11/orca-agent-status-relay.git
-```
+1. plugin 機能のトグルを ON にします。
+2. **プラグインをインストール** を押し、**Git URL** を選んで次の URL を入力します。
 
-1. Orca の **Settings → Plugins** で plugin 機能を ON にします。
-2. **Development** に clone したフォルダのパスを追加します。
+   ```text
+   https://github.com/andoshin11/orca-agent-status-relay#v0.1.0
+   ```
+
+   `#` の後ろは使うバージョンのタグです。[Releases / Tags](https://github.com/andoshin11/orca-agent-status-relay/tags) から選んでください。タグを指定すると、そのコミットに固定してインストールされます。
 3. 一覧の「Agent Status Relay」で **Review** を押し、権限 `events:subscribe` を確認して承認します。
+4. 下の「設定」に従って設定ファイルを作ります。
 
-実行時の依存パッケージはないので、`npm install` は不要です（`devDependencies` は manifest 検証用です）。
+Orca はリポジトリの中身をそのままコピーし、ビルドや `npm install` は行いません。この plugin には実行時の依存パッケージがないので、そのまま動きます（`devDependencies` は manifest の検証用です）。
+
+### 更新
+
+Git URL でインストールした plugin には、Orca から更新の通知は届きません。新しいタグを指定して、もう一度インストールしてください。
+
+### 開発中のコードを試す
+
+clone したフォルダを **ローカルフォルダー** として読み込むと、手元の変更をそのまま試せます。
 
 ## 設定
 
@@ -134,7 +145,7 @@ Orca v0 の plugin worker は普通の Node.js プロセスとして動き、フ
 - **セッションやターンの ID は送れません。** Orca のイベントに含まれていないためです（[stablyai/orca#15680](https://github.com/stablyai/orca/pull/15680)・[#15640](https://github.com/stablyai/orca/pull/15640) が open）。
 - **`mainAgent.outcome`（正常終了か中断か）は、確認した範囲では一度も入っていませんでした。**
 - `blocked` は実機では未確認です。`done` と `waiting` は Orca 1.4.223 + Claude Code で確認しています。
-- Orca の marketplace 経由のインストールには、まだ対応していません。
+- Orca の marketplace（`orca-marketplace.json`）には登録していません。インストールは Git URL の指定で行います。
 
 ## 開発
 
