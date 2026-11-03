@@ -1,18 +1,20 @@
 {
-  "manifestVersion": 1,
+  "manifestVersion": 2,
+  "execution": "trusted-worker",
   "id": "agent-status-relay",
   "publisher": "andoshin11",
   "name": "Agent Status Relay",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Forwards agent status changes (turn done, waiting, blocked) to a URL you configure, signed with Standard Webhooks.",
   "author": { "name": "andoshin11", "url": "https://github.com/andoshin11" },
   "repository": "https://github.com/andoshin11/orca-agent-status-relay",
-  "engines": { "orca": ">=1.4.223" },
+  "license": "MIT",
+  "engines": { "orca": ">=1.4.245" },
   "pluginApi": 1,
   "main": "main.mjs",
   "contributes": {
     "commands": [{ "id": "agent-status-relay.send-test", "title": "Agent Status Relay: Send test event" }],
     "events": [{ "on": "agent.status.changed" }]
   },
-  "capabilities": [{ "kind": "events:subscribe" }]
+  "capabilities": [{ "kind": "agent:read" }]
 }
