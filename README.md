@@ -7,7 +7,7 @@ Orca ── agent.status.changed ──▶ この plugin（worker） ── 署�
 ```
 
 > [!WARNING]
-> Orca の plugin 機能は experimental です（pluginApi v1、互換性の保証なし）。この plugin は **Orca 1.4.223 で動作を確認**しています。
+> Orca の plugin 機能は experimental です（pluginApi v1、互換性の保証なし）。この plugin は Orca 1.4.245 以上を対象にしています。
 
 ## できること
 
@@ -17,34 +17,27 @@ Orca ── agent.status.changed ──▶ この plugin（worker） ── 署�
 
 ## 必要なもの
 
-- Orca 1.4.223 以上
+- Orca 1.4.245 以上
 - macOS または Linux（Windows には未対応です。設定ファイルの権限確認が POSIX の権限に依存するためです）
 - Settings → Plugins で plugin 機能を有効にしていること（既定では無効）
 
 ## インストール
 
-Orca の **Settings → Plugins** で、Git URL を指定してインストールします。
-
-1. plugin 機能のトグルを ON にします。
-2. **プラグインをインストール** を押し、**Git URL** を選んで次の URL を入力します。
+1. Orca の **設定 → プラグイン → ⋯ → カタログのソース…** で、次のカタログを追加します。Ref は `main` です。
 
    ```text
-   https://github.com/andoshin11/orca-agent-status-relay#v0.1.0
+   https://github.com/andoshin11/orca-plugins
    ```
 
-   `#` の後ろは使うバージョンのタグです。[Releases / Tags](https://github.com/andoshin11/orca-agent-status-relay/tags) から選んでください。タグを指定すると、そのコミットに固定してインストールされます。
-3. 一覧の「Agent Status Relay」で **Review** を押し、権限 `events:subscribe` を確認して承認します。
+2. プラグインの一覧で Agent Status Relay を探して、**確認してインストール** を押します。
+3. アクセスできる範囲（Agent ステータスの通知）を確かめて、インストールして有効にします。
 4. 下の「設定」に従って設定ファイルを作ります。
 
 Orca はリポジトリの中身をそのままコピーし、ビルドや `npm install` は行いません。この plugin には実行時の依存パッケージがないので、そのまま動きます（`devDependencies` は manifest の検証用です）。
 
 ### 更新
 
-Git URL でインストールした plugin には、Orca から更新の通知は届きません。新しいタグを指定して、もう一度インストールしてください。
-
-### 開発中のコードを試す
-
-clone したフォルダを **ローカルフォルダー** として読み込むと、手元の変更をそのまま試せます。
+カタログから入れた場合は、**プラグインを自動でアップデート**（既定でオン）により、Orca が自動で更新します。手動で更新するには、プラグインの一覧で **⋯** から **アップデートを確認** を押します。
 
 ## 設定
 
@@ -133,7 +126,7 @@ webhook-signature: v1,<base64(HMAC-SHA256(secret, "<id>.<timestamp>.<body>"))>
 
 ## 権限について
 
-Orca の権限確認ダイアログに表示されるのは `events:subscribe` だけです。ただしこの plugin の worker は、Orca の権限の仕組み（v0）の外で次のことも行います。
+Orca の権限確認ダイアログには、フルアクセス（通常のプログラムとして実行）と `agent:read`（Agent ステータスの通知）が表示されます。この plugin の worker は、具体的には次のことを行います。
 
 - `~/.config/orca-agent-status-relay/config.json` の読み込み
 - 設定した URL への HTTP 通信
@@ -145,7 +138,6 @@ Orca v0 の plugin worker は普通の Node.js プロセスとして動き、フ
 - **セッションやターンの ID は送れません。** Orca のイベントに含まれていないためです（[stablyai/orca#15680](https://github.com/stablyai/orca/pull/15680)・[#15640](https://github.com/stablyai/orca/pull/15640) が open）。
 - **`mainAgent.outcome`（正常終了か中断か）は、確認した範囲では一度も入っていませんでした。**
 - `blocked` は実機では未確認です。`done` と `waiting` は Orca 1.4.223 + Claude Code で確認しています。
-- Orca の marketplace（`orca-marketplace.json`）には登録していません。インストールは Git URL の指定で行います。
 
 ## 開発
 
@@ -157,7 +149,7 @@ npm test
 ORCA_SOURCE_DIR=/path/to/orca npm run check:manifest
 ```
 
-CI では `engines.orca` と同じ Orca のタグ（v1.4.223）を取得して、manifest を検証します。
+CI では `engines.orca` と同じ Orca のタグ（v1.4.245）を取得して、manifest を検証します。
 
 ## ライセンス
 

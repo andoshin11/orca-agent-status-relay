@@ -14,7 +14,7 @@ if (!orcaDir) {
   console.error('ORCA_SOURCE_DIR is required (a checkout of stablyai/orca)')
   process.exit(1)
 }
-const parserPath = resolve(orcaDir, 'src/shared/plugins/plugin-manifest.ts')
+const parserPath = resolve(orcaDir, 'src/shared/plugins/manifest/plugin-manifest.ts')
 if (!existsSync(parserPath)) {
   console.error(`Orca manifest parser not found at ${parserPath}`)
   process.exit(1)
